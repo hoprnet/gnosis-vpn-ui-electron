@@ -11,7 +11,8 @@
     "package": "tsc && electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "lint": "echo \"No linting configured\"",
+    "run-install": "yarn && cd renderer && yarn && cd .."
   },
   "keywords": [],
   "author": {
