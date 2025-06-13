@@ -19,8 +19,6 @@ const createWindow = () => {
     },
   });
 
-
-
   if(isDev) {
     // During development, load the React dev server
     mainWindow.loadURL('http://localhost:5173'); // or your dev server port
