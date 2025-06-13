@@ -33,7 +33,7 @@
     "@electron-forge/plugin-auto-unpack-natives": "^7.8.1",
     "@electron-forge/plugin-fuses": "^7.8.1",
     "@electron/fuses": "^1.8.0",
-    "@types/electron": "^1.4.38",
+    "@types/electron": "36.4.0",
     "@types/node": "^24.0.1",
     "electron": "36.4.0",
     "typescript": "^5.8.3"
