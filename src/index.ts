@@ -6,6 +6,8 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
+const isDev = process.env.NODE_ENV === 'development';
+
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -16,8 +18,15 @@ const createWindow = () => {
     },
   });
 
-  // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, '../src/index.html'));
+
+
+  if(isDev) {
+    // During development, load the React dev server
+    mainWindow.loadURL('http://localhost:5173'); // or your dev server port
+  } else {
+    // and load the index.html of the app.
+    mainWindow.loadFile(path.join(__dirname, '../renderer/dist/index.html'));
+  }
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
