@@ -5,7 +5,7 @@ Requirements:
 
 To install deps:
 
-`yarn`
+`yarn && cd render && yarn && cd ..`
 
 To start in dev mode:
 
