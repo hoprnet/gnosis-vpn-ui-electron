@@ -7,6 +7,7 @@ if (require('electron-squirrel-startup')) {
 }
 
 const isDev = process.env.NODE_ENV === 'development';
+console.log('Is development:', process.env.NODE_ENV, isDev);
 
 const createWindow = () => {
   // Create the browser window.
