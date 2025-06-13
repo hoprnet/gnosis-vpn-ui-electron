@@ -11,4 +11,3 @@ To start in dev mode:
 
 `yarn start`
 
-
