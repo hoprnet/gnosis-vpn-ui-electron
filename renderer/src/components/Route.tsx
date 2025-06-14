@@ -1,6 +1,11 @@
+import { useState } from 'react';
+import ManageRouteModal from './ManageRoute';
+
 export const Route = ({ stops }: { stops: string[] }) => {
+  const [open, setOpen] = useState(true);
+
   const handleManageRoute = () => {
-    console.log('manage route');
+    setOpen(true);
   };
 
   return (
@@ -60,6 +65,8 @@ export const Route = ({ stops }: { stops: string[] }) => {
           Manage route
         </button>
       </div>
+
+      <ManageRouteModal open={open} setOpen={setOpen} />
     </div>
   );
 };
