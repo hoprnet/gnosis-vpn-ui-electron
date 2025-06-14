@@ -78,7 +78,7 @@ const createWindow = () => {
           await startService();
           console.info("Service status:", await getStatusInfo());
           await new Promise((r) => setTimeout(r, 2000));
-          connectToServer(
+          await connectToServer(
             "12D3KooWMEXkxWMitwu9apsHmjgDZ7imVHgEsjXfcyZfrqYMYjW7",
           );
 
