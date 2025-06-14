@@ -10,6 +10,20 @@ function App() {
   const [statusY, setStatusY] = useState<number | null>(null);
 
   useEffect(() => {
+    const handler = (msg: string) => {
+      console.log('Received from main:', msg);
+    };
+
+    window.electronAPI.onMessage(handler);
+    console.log('onMessage event handler loaded');
+
+    return () => {
+      window.electronAPI.offMessage(handler);
+      console.log('onMessage event handler unloaded');
+    };
+  }, []);
+
+  useEffect(() => {
     if (statusRef.current) {
       setStatusY(statusRef.current.getBoundingClientRect().y);
     }

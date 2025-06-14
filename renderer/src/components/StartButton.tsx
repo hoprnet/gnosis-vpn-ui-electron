@@ -5,7 +5,25 @@ export const StartButton = ({
   running: boolean;
   setRunning: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
+  function sendMessage(msg: string) {
+    window.electronAPI.sendMessage(msg);
+    console.log('sendMessage: ', msg);
+  }
+
   const handleClick = () => {
+    if (!running) {
+      sendMessage(
+        JSON.stringify({
+          type: 'startVPN',
+        })
+      );
+    } else {
+      sendMessage(
+        JSON.stringify({
+          type: 'stopVPN',
+        })
+      );
+    }
     setRunning((running: boolean) => !running);
   };
   return (
