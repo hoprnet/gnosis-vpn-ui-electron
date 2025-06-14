@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 type Line = { d: string };
 
-const LinePaths = () => {
+const LinePaths = ({ y }: { y: number | null }) => {
   const [width, setWidth] = useState(window.innerWidth);
   const [height, setHeight] = useState(window.innerHeight);
 
@@ -18,7 +18,7 @@ const LinePaths = () => {
   const halfWidth = width / 2;
   const gap = 40;
   const linesData = [
-    { d: `M${halfWidth} 0 V${height}` },
+    { d: `M${halfWidth} ${(y || 0) * 2} V${height}` },
 
     { d: `M${halfWidth - gap} ${height * 0.25} V${height}` },
     { d: `M${halfWidth - gap} ${height * 0.25} H000` },
@@ -26,6 +26,7 @@ const LinePaths = () => {
     { d: `M${halfWidth + gap} ${height * 0.7} V${height}` },
     { d: `M${halfWidth + gap} ${height * 0.7} H${width}` },
   ];
+  console.log(linesData[0].d);
 
   return (
     <svg
