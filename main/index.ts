@@ -46,8 +46,8 @@ const createWindow = () => {
   });
 
   ipcMain.on("message", async (_event: any, msg: string) => {
-    console.log("Received from renderer:", msg);
-
+    console.log("Received from renderer: ", msg);
+    
     const json = JSON.parse(msg);
     const type = json.type;
     const payload = json.payload;
