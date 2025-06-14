@@ -37,7 +37,8 @@
   },
   "build": {
     "productName": "Gnosis VPN",
-  "extraResources": [
-    "binaries/*/*"
-  ]}
+    "extraResources": [
+      "binaries/*/*"
+    ]
+  }
 }

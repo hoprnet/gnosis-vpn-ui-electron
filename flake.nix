@@ -2,12 +2,14 @@
   description = "gnosis-vpn-ui-electron";
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
-  inputs.nixpkgs.url   = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    flake-parts.url = "github:hercules-ci/flake-parts";
-    treefmt-nix.url = "github:numtide/treefmt-nix";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+  inputs.flake-parts.url = "github:hercules-ci/flake-parts";
+  inputs.treefmt-nix.url = "github:numtide/treefmt-nix";
+  inputs.flake-root.url = "github:srid/flake-root";
 
-    flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
-    treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
+  inputs.treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
+
   outputs =
     {
       self,
@@ -23,10 +25,16 @@
         inputs.treefmt-nix.flakeModule
         inputs.flake-root.flakeModule
       ];
-      perSystem = { config, lib, system, ... }:
+      perSystem =
+        {
+          config,
+          lib,
+          system,
+          ...
+        }:
         let
           localSystem = system;
-          overlays = [];
+          overlays = [ ];
           pkgs = import nixpkgs {
             inherit localSystem overlays;
           };

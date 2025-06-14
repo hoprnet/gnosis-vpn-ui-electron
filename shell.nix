@@ -1,14 +1,15 @@
-{ pkgs ? import <nixpkgs> {}, ... }:
+{
+  pkgs ? import <nixpkgs> { },
+  ...
+}:
 let
-  linuxPkgs = with pkgs; lib.optional stdenv.isLinux (
-    inotifyTools
-  );
-  macosPkgs = with pkgs; lib.optional stdenv.isDarwin (
-      [
+  linuxPkgs = with pkgs; lib.optional stdenv.isLinux (inotifyTools);
+  macosPkgs =
+    with pkgs;
+    lib.optional stdenv.isDarwin ([
       # macOS file watcher support
       apple-sdk_15
-    ]
-  );
+    ]);
 in
 with pkgs;
 mkShell {
