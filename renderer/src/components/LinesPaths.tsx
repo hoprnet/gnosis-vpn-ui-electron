@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react';
 
-type Line = { d: string };
+type Line = {
+  d: string;
+  stroke?: string;
+  strokeLinecap?: 'square' | 'butt' | 'round' | 'inherit' | undefined;
+};
 
-const LinePaths = ({ y }: { y: number | null }) => {
+const LinePaths = ({ y, running }: { y: number | null; running: boolean }) => {
   const [width, setWidth] = useState(window.innerWidth);
   const [height, setHeight] = useState(window.innerHeight);
 
@@ -26,7 +30,27 @@ const LinePaths = ({ y }: { y: number | null }) => {
     { d: `M${halfWidth + gap} ${height * 0.7} V${height}` },
     { d: `M${halfWidth + gap} ${height * 0.7} H${width}` },
   ];
-  console.log(linesData[0].d);
+
+  const linesDataRunning = [
+    {
+      d: `M${halfWidth - gap} ${height} V${height * 0.82}`,
+      stroke: '#fafafa94',
+    },
+    { d: `M${halfWidth - gap} ${height * 0.82} H000`, stroke: '#fafafa94' },
+    {
+      d: `M${halfWidth + gap} ${height * 0.78} V${height}`,
+      stroke: '#fafafa94',
+    },
+    {
+      d: `M${halfWidth + gap} ${height * 0.78} H${width}`,
+      stroke: '#fafafa94',
+    },
+    {
+      d: `M${halfWidth} ${height * 0.8} V${height}`,
+      stroke: '#00a63e',
+      strokeLinecap: 'square' as const,
+    },
+  ];
 
   return (
     <svg
@@ -36,16 +60,27 @@ const LinePaths = ({ y }: { y: number | null }) => {
       strokeLinecap="square"
       style={{ position: 'absolute', top: 0, left: 0 }}
     >
-      {linesData.map((line: Line, index: number) => (
-        <path
-          key={index}
-          d={line.d}
-          stroke="#fafafa"
-          strokeWidth="25"
-          fill="none"
-          strokeLinecap="round"
-        />
-      ))}
+      {running
+        ? linesDataRunning.map((line: Line, index: number) => (
+            <path
+              key={index}
+              d={line.d}
+              stroke={line.stroke}
+              strokeWidth="25"
+              fill="none"
+              strokeLinecap={line.strokeLinecap || 'round'}
+            />
+          ))
+        : linesData.map((line: Line, index: number) => (
+            <path
+              key={index}
+              d={line.d}
+              stroke="#fafafa"
+              strokeWidth="25"
+              fill="none"
+              strokeLinecap="round"
+            />
+          ))}
     </svg>
   );
 };
