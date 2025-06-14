@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -28,6 +28,19 @@ const createWindow = () => {
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
+
+  // Send message after the window finishes loading
+  mainWindow.webContents.on('did-finish-load', () => {
+    mainWindow.webContents.send('message', 'Window loaded to the main process!');
+  });
+
+
+  ipcMain.on('message', (_event: any, msg: string) => {
+    console.log('Received from renderer:', msg);
+    mainWindow.webContents.send('message', 'Sending message back to renderer: ' + msg);
+  });
+
+
 };
 
 // This method will be called when Electron has finished
