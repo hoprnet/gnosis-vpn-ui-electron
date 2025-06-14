@@ -44,6 +44,15 @@ function Button() {
             >
                 Start VPN
             </button>
+            <button
+                onClick={() => { sendMessage(
+                    JSON.stringify({
+                        type: 'stopVPN',
+                    })
+                )}}
+            >
+                Stop VPN
+            </button>
         </>
     )
 }

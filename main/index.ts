@@ -1,6 +1,11 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("node:path");
-import { updateConfigFile } from "./commands";
+import { 
+  updateConfigFile, 
+  startService,
+  stopService,
+  connectToServer
+} from "./commands";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -8,6 +13,8 @@ if (require("electron-squirrel-startup")) {
 }
 
 const isDev = process.env.NODE_ENV === "development";
+
+let chaildProcess: any = null;
 
 const createWindow = () => {
   // Create the browser window.
@@ -67,11 +74,31 @@ const createWindow = () => {
         break;
       case 'startVPN':
         try {
-        //  const response = await <SOME_FUN>();
+          chaildProcess = await startService();
+          connectToServer('12D3KooWMEXkxWMitwu9apsHmjgDZ7imVHgEsjXfcyZfrqYMYjW7');
           mainWindow.webContents.send(
             "message",
             JSON.stringify({
               type: "startVPNResponse",
+              payload: "Success"
+            })
+          );
+        } catch (e) {
+          mainWindow.webContents.send(
+            "message",
+            JSON.stringify({
+              error: e
+            })
+          );
+        }
+        break;
+      case 'stopVPN':
+        try {
+          stopService(chaildProcess);
+          mainWindow.webContents.send(
+            "message",
+            JSON.stringify({
+              type: "stopVPNResponse",
               payload: "Success"
             })
           );

@@ -97,11 +97,11 @@ function vpnBinaryName(suffix: string = ""): string {
 }
 
 function vpnServiceBinaryPath() {
-  return join(__dirname, "binaries", version, vpnBinaryName());
+  return join(__dirname, "..", "binaries", version, vpnBinaryName());
 }
 
 function vpnControlBinaryPath() {
-  return join(__dirname, "binaries", version, vpnBinaryName("ctl"));
+  return join(__dirname, "..", "binaries", version, vpnBinaryName("ctl"));
 }
 
 function executeBinary(
