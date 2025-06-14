@@ -5,8 +5,10 @@
   "description": "My Electron application description",
   "main": "dist/index.js",
   "scripts": {
-    "start": "concurrently \"yarn:electron\" \"yarn:react\"",
+    "build:watch": "tsc --watch",
     "electron": "tsc && NODE_ENV=development electron-forge start",
+    "electron:dev": "NODE_ENV=development electronmon .",
+    "start": "concurrently \"yarn build:watch\" \"yarn:electron:dev\" \"yarn:react\"",
     "react": "cd renderer && tsc && yarn dev",
     "package": "tsc && electron-forge package",
     "make": "electron-forge make",
@@ -34,6 +36,7 @@
     "@electron/fuses": "^1.8.0",
     "concurrently": "^9.1.2",
     "electron": "36.4.0",
+    "electronmon": "^2.0.3",
     "typescript": "^5.8.3"
   },
   "build": {

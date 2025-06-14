@@ -4,7 +4,8 @@ import {
   updateConfigFile, 
   startService,
   stopService,
-  connectToServer
+  connectToServer,
+  getStatusInfo
 } from "./commands";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -46,8 +47,8 @@ const createWindow = () => {
   });
 
   ipcMain.on("message", async (_event: any, msg: string) => {
-    console.log("Received from renderer:", msg);
-
+    console.log("Received from renderer: ", msg);
+    
     const json = JSON.parse(msg);
     const type = json.type;
     const payload = json.payload;
@@ -100,6 +101,25 @@ const createWindow = () => {
             JSON.stringify({
               type: "stopVPNResponse",
               payload: "Success"
+            })
+          );
+        } catch (e) {
+          mainWindow.webContents.send(
+            "message",
+            JSON.stringify({
+              error: e
+            })
+          );
+        }
+        break;
+      case 'status':
+        try {
+          const payload = await getStatusInfo();
+          mainWindow.webContents.send(
+            "message",
+            JSON.stringify({
+              type: "statusResponse",
+              payload
             })
           );
         } catch (e) {
