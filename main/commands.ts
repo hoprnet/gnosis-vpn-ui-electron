@@ -3,8 +3,30 @@ import { homedir } from "os";
 import { promises as fs } from "fs";
 import { spawn, ChildProcess } from "child_process";
 import { join } from "node:path";
+import sudo from "sudo-prompt";
+
+const sudoOptions = {
+  name: "Gnosis VPN Service",
+};
+
+const sudo_exec = (cmd: string): Promise<string | Buffer | undefined> => {
+  return new Promise((resolve, reject) => {
+    console.info("run sudo command:", cmd);
+    sudo.exec(cmd, sudoOptions, (error, stdout, stderr) => {
+      if (error) {
+        reject(error);
+        console.log("error:" + error);
+        console.log("error output:" + stderr);
+      } else {
+        console.log("stdout: " + stdout);
+        resolve(stdout);
+      }
+    });
+  });
+};
 
 const version = "v0.10.10";
+const socketPath = "/var/run/gnosis_vpn.sock";
 
 const configFileTemplate = `
 version = 2
@@ -19,19 +41,23 @@ internal_connection_port = <PORT>
 
 [destinations.12D3KooWMEXkxWMitwu9apsHmjgDZ7imVHgEsjXfcyZfrqYMYjW7]
 meta = { location = "Germany" }
-path = { intermediates = [ "12D3KooWFUD4BSzjopNzEzhSi9chAkZXRKGtQJzU482rJnyd2ZnP" ] }
+# path = { intermediates = [ "12D3KooWFUD4BSzjopNzEzhSi9chAkZXRKGtQJzU482rJnyd2ZnP" ] }
+path = { hops = 0 }
 
 [destinations.12D3KooWBRB3y81TmtqC34JSd61uS8BVeUqWxCSBijD5nLhL6HU5]
 meta = { location = "USA" }
-path = { intermediates = [ "12D3KooWQLTR4zdLyXToQGx3YKs9LJmeL4MKJ3KMp4rfVibhbqPQ" ] }
+# path = { intermediates = [ "12D3KooWQLTR4zdLyXToQGx3YKs9LJmeL4MKJ3KMp4rfVibhbqPQ" ] }
+path = { hops = 0 }
 
 [destinations.12D3KooWGdcnCwJ3645cFgo4drvSN3TKmxQFYEZK7HMPA6wx1bjL]
 meta = { location = "Spain" }
-path = { intermediates = [ "12D3KooWFnMnefPQp2k3XA3yNViBH4hnUCXcs9LasLUSv6WAgKSr" ] }
+# path = { intermediates = [ "12D3KooWFnMnefPQp2k3XA3yNViBH4hnUCXcs9LasLUSv6WAgKSr" ] }
+path = { hops = 0 }
 
 [destinations.12D3KooWJVhifJNJQPDSYz5aC8hWEyFdgB3xdJyKYQoPYLn4Svv8]
 meta = { location = "India" }
-path = { intermediates = [ "12D3KooWFcTznqz9wEvPFPsTTXDVtWXtPy8jo4AAUXHUqTW8fP2h" ] }
+# path = { intermediates = [ "12D3KooWFcTznqz9wEvPFPsTTXDVtWXtPy8jo4AAUXHUqTW8fP2h" ] }
+path = { hops = 0 }
 `;
 
 export async function updateConfigFile(
@@ -48,21 +74,34 @@ export async function updateConfigFile(
   await writeConfig(config);
 }
 
-export function stopService(process: ChildProcess): void {
-  process.kill();
+export async function stopService(): Promise<boolean> {
+  const stdout = await sudo_exec(`lsof -t ${socketPath} || :`);
+  if (typeof stdout === "string" || stdout instanceof String) {
+    const pids: string[] = stdout.trim().split("\n");
+    for (const pid of pids) {
+      if (!pid) {
+        continue;
+      }
+      const killCmd = `kill -4 ${pid}`;
+      await sudo_exec(killCmd);
+    }
+  }
+  return true;
 }
 
-export function startService(): ChildProcess {
-  return executeBinary(
-    vpnServiceBinaryPath(),
-    ["-c", configFilePath()],
-    (data) => {
-      console.info("Service log output:", data);
-    },
-    (error) => {
-      console.error("Error starting VPN service:", error);
-    },
-  );
+export async function startService(): Promise<boolean> {
+  // first kill any running service
+  const stopResult = await stopService();
+  if (!stopResult) {
+    return false;
+  }
+
+  // now start service again
+  const cmd = `nohup ${vpnServiceBinaryPath()} -s ${socketPath} -c ${configFilePath()} 2> /var/log/gnosis_vpn.error.log > /var/log/gnosis_vpn.log &`;
+  const stdout = await sudo_exec(cmd);
+  console.info("Service started:", stdout);
+
+  return true;
 }
 
 export function getStatusInfo(): Promise<string> {
@@ -74,7 +113,7 @@ export async function connectToServer(server: string): Promise<boolean> {
   return true;
 }
 
-export async function disconnectToServer(server: string): Promise<boolean> {
+export async function disconnectFromServer(server: string): Promise<boolean> {
   await executeCommand(vpnControlBinaryPath(), ["disconnect", server]);
   return true;
 }
@@ -90,7 +129,7 @@ function vpnBinaryName(suffix: string = ""): string {
   if (!isValidOsArchitecture()) {
     throw new Error(`Unsupported OS or architecture: ${platform}-${arch}`);
   }
-  const binaryArch = arch === "x64" ? "x86_64" : "arm64";
+  const binaryArch = arch === "x64" ? "x86_64" : "aarch64";
   const fullSuffix = suffix ? `-${suffix}` : "";
   // Result: gnosis_vpn[-ctl]-x86_64-darwin
   return `gnosis_vpn${fullSuffix}-${binaryArch}-${platform}`;

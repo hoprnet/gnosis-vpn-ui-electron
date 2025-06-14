@@ -1,11 +1,11 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("node:path");
-import { 
-  updateConfigFile, 
+import {
+  updateConfigFile,
   startService,
   stopService,
   connectToServer,
-  getStatusInfo
+  getStatusInfo,
 } from "./commands";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -14,8 +14,6 @@ if (require("electron-squirrel-startup")) {
 }
 
 const isDev = process.env.NODE_ENV === "development";
-
-let chaildProcess: any = null;
 
 const createWindow = () => {
   // Create the browser window.
@@ -48,86 +46,91 @@ const createWindow = () => {
 
   ipcMain.on("message", async (_event: any, msg: string) => {
     console.log("Received from renderer: ", msg);
-    
+
     const json = JSON.parse(msg);
     const type = json.type;
     const payload = json.payload;
 
     switch (type) {
-      case 'updateConfigFile':
+      case "updateConfigFile":
         try {
           await updateConfigFile(payload.apiEndpoint, payload.apiToken);
           mainWindow.webContents.send(
             "message",
             JSON.stringify({
               type: "updateConfigFileResponse",
-              payload: "Success"
-            })
+              payload: "Success",
+            }),
           );
         } catch (e) {
           mainWindow.webContents.send(
             "message",
             JSON.stringify({
-              error: e
-            })
+              error: e,
+            }),
           );
         }
         break;
-      case 'startVPN':
+      case "startVPN":
         try {
-          chaildProcess = await startService();
-          connectToServer('12D3KooWMEXkxWMitwu9apsHmjgDZ7imVHgEsjXfcyZfrqYMYjW7');
+          await startService();
+          console.info("Service status:", await getStatusInfo());
+          await new Promise((r) => setTimeout(r, 2000));
+          await connectToServer(
+            "12D3KooWMEXkxWMitwu9apsHmjgDZ7imVHgEsjXfcyZfrqYMYjW7",
+          );
+
           mainWindow.webContents.send(
             "message",
             JSON.stringify({
               type: "startVPNResponse",
-              payload: "Success"
-            })
+              payload: "Success",
+            }),
           );
         } catch (e) {
           mainWindow.webContents.send(
             "message",
             JSON.stringify({
-              error: e
-            })
+              error: e,
+            }),
           );
         }
         break;
-      case 'stopVPN':
+      case "stopVPN":
         try {
-          stopService(chaildProcess);
+          await stopService();
           mainWindow.webContents.send(
             "message",
             JSON.stringify({
               type: "stopVPNResponse",
-              payload: "Success"
-            })
+              payload: "Success",
+            }),
           );
         } catch (e) {
           mainWindow.webContents.send(
             "message",
             JSON.stringify({
-              error: e
-            })
+              error: e,
+            }),
           );
         }
         break;
-      case 'status':
+      case "status":
         try {
           const payload = await getStatusInfo();
           mainWindow.webContents.send(
             "message",
             JSON.stringify({
               type: "statusResponse",
-              payload
-            })
+              payload,
+            }),
           );
         } catch (e) {
           mainWindow.webContents.send(
             "message",
             JSON.stringify({
-              error: e
-            })
+              error: e,
+            }),
           );
         }
         break;
