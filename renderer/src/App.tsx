@@ -8,6 +8,7 @@ import { Route } from './components/Route';
 function App() {
   const [running, setRunning] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const statusRef = useRef<HTMLDivElement | null>(null);
   const [statusY, setStatusY] = useState<number | null>(null);
 
@@ -21,10 +22,18 @@ function App() {
       console.log(typeof msg);
       const _msg = JSON.parse(msg);
       console.log('Received from main:', msg);
+      console.log('loading: ', loading);
+      console.log('running: ', running);
       if (_msg.error) {
         setStatus('error');
+        setRunning(false);
       } else {
         setStatus('online');
+
+        if (!running && loading) {
+          setRunning(true);
+          setLoading(false);
+        }
       }
     };
 
@@ -50,7 +59,7 @@ function App() {
           type: 'status',
         })
       );
-    }, 1000);
+    }, 3000);
     return () => clearInterval(interval);
   }, []);
 
@@ -63,7 +72,12 @@ function App() {
         <div className="flex flex-col items-center relative z-10 w-full h-full">
           <Status ref={statusRef} running={running} status={status} />
           {running && <Route stops={['Germany', 'Spain']} />}
-          <StartButton running={running} setRunning={setRunning} />
+          <StartButton
+            running={running}
+            setRunning={setRunning}
+            loading={loading}
+            setLoading={setLoading}
+          />
         </div>
       </div>
     </>

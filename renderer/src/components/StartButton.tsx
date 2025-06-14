@@ -3,9 +3,13 @@ import { Mode } from './Mode';
 export const StartButton = ({
   running,
   setRunning,
+  loading,
+  setLoading,
 }: {
   running: boolean;
   setRunning: React.Dispatch<React.SetStateAction<boolean>>;
+  loading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   function sendMessage(msg: string) {
     window.electronAPI.sendMessage(msg);
@@ -13,20 +17,22 @@ export const StartButton = ({
   }
 
   const handleClick = () => {
-    // if (!running) {
-    //   sendMessage(
-    //     JSON.stringify({
-    //       type: 'startVPN',
-    //     })
-    //   );
-    // } else {
-    //   sendMessage(
-    //     JSON.stringify({
-    //       type: 'stopVPN',
-    //     })
-    //   );
-    // }
-    setRunning((running: boolean) => !running);
+    if (!running && !loading) {
+      sendMessage(
+        JSON.stringify({
+          type: 'startVPN',
+        })
+      );
+      setLoading(true);
+    } else {
+      sendMessage(
+        JSON.stringify({
+          type: 'stopVPN',
+        })
+      );
+      setRunning(false);
+    }
+    // setRunning((running: boolean) => !running);
   };
 
   return (
