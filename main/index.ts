@@ -15,8 +15,6 @@ if (require("electron-squirrel-startup")) {
 
 const isDev = process.env.NODE_ENV === "development";
 
-let chaildProcess: any = null;
-
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -47,8 +45,8 @@ const createWindow = () => {
   });
 
   ipcMain.on("message", async (_event: any, msg: string) => {
-    console.log("Received from renderer:", msg);
-
+    console.log("Received from renderer: ", msg);
+    
     const json = JSON.parse(msg);
     const type = json.type;
     const payload = json.payload;
@@ -114,6 +112,25 @@ const createWindow = () => {
             JSON.stringify({
               error: e,
             }),
+          );
+        }
+        break;
+      case 'status':
+        try {
+          const payload = await getStatusInfo();
+          mainWindow.webContents.send(
+            "message",
+            JSON.stringify({
+              type: "statusResponse",
+              payload
+            })
+          );
+        } catch (e) {
+          mainWindow.webContents.send(
+            "message",
+            JSON.stringify({
+              error: e
+            })
           );
         }
         break;
