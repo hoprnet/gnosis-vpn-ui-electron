@@ -1,12 +1,12 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
-const path = require('node:path');
+const { app, BrowserWindow, ipcMain } = require("electron");
+const path = require("node:path");
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (require('electron-squirrel-startup')) {
+if (require("electron-squirrel-startup")) {
   app.quit();
 }
 
-const isDev = process.env.NODE_ENV === 'development';
+const isDev = process.env.NODE_ENV === "development";
 
 const createWindow = () => {
   // Create the browser window.
@@ -14,33 +14,36 @@ const createWindow = () => {
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, "preload.js"),
     },
   });
 
-  if(isDev) {
+  if (isDev) {
     // During development, load the React dev server
-    mainWindow.loadURL('http://localhost:5173'); // or your dev server port
+    mainWindow.loadURL("http://localhost:5173"); // or your dev server port
   } else {
     // and load the index.html of the app.
-    mainWindow.loadFile(path.join(__dirname, '../renderer/dist/index.html'));
+    mainWindow.loadFile(path.join(__dirname, "../renderer/dist/index.html"));
   }
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
 
   // Send message after the window finishes loading
-  mainWindow.webContents.on('did-finish-load', () => {
-    mainWindow.webContents.send('message', 'Window loaded to the main process!');
+  mainWindow.webContents.on("did-finish-load", () => {
+    mainWindow.webContents.send(
+      "message",
+      "Window loaded to the main process!",
+    );
   });
 
-
-  ipcMain.on('message', (_event: any, msg: string) => {
-    console.log('Received from renderer:', msg);
-    mainWindow.webContents.send('message', 'Sending message back to renderer: ' + msg);
+  ipcMain.on("message", (_event: any, msg: string) => {
+    console.log("Received from renderer:", msg);
+    mainWindow.webContents.send(
+      "message",
+      "Sending message back to renderer: " + msg,
+    );
   });
-
-
 };
 
 // This method will be called when Electron has finished
@@ -51,7 +54,7 @@ app.whenReady().then(() => {
 
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  app.on('activate', () => {
+  app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();
     }
@@ -61,8 +64,8 @@ app.whenReady().then(() => {
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
     app.quit();
   }
 });
