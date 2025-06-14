@@ -2,7 +2,7 @@ import { useState } from 'react';
 import ManageRouteModal from './ManageRoute';
 
 export const Route = ({ stops }: { stops: string[] }) => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const handleManageRoute = () => {
     setOpen(true);
