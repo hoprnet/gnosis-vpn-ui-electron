@@ -28,17 +28,21 @@ function vpnBinaryName(suffix: string = ''): string {
   if (!isValidOsArchitecture()) {
     throw new Error(`Unsupported OS or architecture: ${platform}-${arch}`);
   }
-  let binaryArch = arch === 'x64' ? 'x86_64' : 'arch64';
-  let fullSuffix = suffix ? `-${suffix}` : '';
-  return `gnosis_vpn-${fullSuffix}${binaryArch}-${platform}`;
+  const binaryArch = arch === 'x64' ? 'x86_64' : 'arm64';
+  const fullSuffix = suffix ? `-${suffix}` : '';
+  // Result: gnosis_vpn[-ctl]-x86_64-darwin
+  return `gnosis_vpn${fullSuffix}-${binaryArch}-${platform}`;
 }
 
+import { platform, arch } from 'node:process';
+import { join } from 'node:path';
+
 function vpnServiceBinaryPath() {
-  return `./binaries/${version}/${vpnBinaryName()}`;
+  return join(__dirname, 'binaries', version, vpnBinaryName());
 }
 
 function vpnControlBinaryPath() {
-  return `./binaries/${version}/${vpnBinaryName('ctl')}`;
+  return join(__dirname, 'binaries', version, vpnBinaryName('ctl'));
 }
 
 function executeBinary(
