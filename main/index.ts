@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("node:path");
+import { updateConfigFile } from "./commands";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -37,12 +38,39 @@ const createWindow = () => {
     );
   });
 
-  ipcMain.on("message", (_event: any, msg: string) => {
+  ipcMain.on("message", async (_event: any, msg: string) => {
     console.log("Received from renderer:", msg);
-    mainWindow.webContents.send(
-      "message",
-      "Sending message back to renderer: " + msg,
-    );
+
+    const json = JSON.parse(msg);
+    const type = json.type;
+    const payload = json.payload;
+
+    switch(type){
+      case 'updateConfigFile':
+        try {
+          await updateConfigFile(payload.apiEnpoint, payload.apiToken);
+          mainWindow.webContents.send(
+            "message",
+            JSON.stringify({
+              type: "updateConfigFileResponse",
+              payload: "Success"
+            })
+          );
+        } catch(e) {
+          mainWindow.webContents.send(
+            "message",
+            JSON.stringify({
+              error: e
+            })
+          );
+        }
+        break;
+      default:
+        mainWindow.webContents.send(
+          "message",
+          "Sending message back to renderer: " + msg,
+        );
+    }
   });
 };
 

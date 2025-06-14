@@ -22,9 +22,17 @@ function Button() {
 
     return (
         <button
-            onClick={() => { sendMessage('Hello!') }}
+            onClick={() => { sendMessage(
+                JSON.stringify({
+                    type: 'updateConfigFile',
+                    payload: {
+                        apiEndpoint: "",
+                        apiToken: ""
+                    }
+                })
+            )}}
         >
-            TEST IPC
+            Create Config
         </button>
     )
 }
