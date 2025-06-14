@@ -21,19 +21,30 @@ function Button() {
     }
 
     return (
-        <button
-            onClick={() => { sendMessage(
-                JSON.stringify({
-                    type: 'updateConfigFile',
-                    payload: {
-                        apiEndpoint: "",
-                        apiToken: ""
-                    }
-                })
-            )}}
-        >
-            Create Config
-        </button>
+        <>
+            <button
+                onClick={() => { sendMessage(
+                    JSON.stringify({
+                        type: 'updateConfigFile',
+                        payload: {
+                            apiEndpoint: "",
+                            apiToken: ""
+                        }
+                    })
+                )}}
+            >
+                Create Config
+            </button>
+            <button
+                onClick={() => { sendMessage(
+                    JSON.stringify({
+                        type: 'startVPN',
+                    })
+                )}}
+            >
+                Start VPN
+            </button>
+        </>
     )
 }
 

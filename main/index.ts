@@ -45,7 +45,7 @@ const createWindow = () => {
     const type = json.type;
     const payload = json.payload;
 
-    switch(type){
+    switch (type) {
       case 'updateConfigFile':
         try {
           await updateConfigFile(payload.apiEndpoint, payload.apiToken);
@@ -56,7 +56,26 @@ const createWindow = () => {
               payload: "Success"
             })
           );
-        } catch(e) {
+        } catch (e) {
+          mainWindow.webContents.send(
+            "message",
+            JSON.stringify({
+              error: e
+            })
+          );
+        }
+        break;
+      case 'startVPN':
+        try {
+        //  const response = await <SOME_FUN>();
+          mainWindow.webContents.send(
+            "message",
+            JSON.stringify({
+              type: "startVPNResponse",
+              payload: "Success"
+            })
+          );
+        } catch (e) {
           mainWindow.webContents.send(
             "message",
             JSON.stringify({
