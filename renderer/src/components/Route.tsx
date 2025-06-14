@@ -1,4 +1,8 @@
 export const Route = ({ stops }: { stops: string[] }) => {
+  const handleManageRoute = () => {
+    console.log('manage route');
+  };
+
   return (
     <div className="flex items-center justify-center h-full w-full pt-10 pb-5">
       <div className="relative flex flex-col items-center justify-between  w-full h-full">
@@ -47,7 +51,11 @@ export const Route = ({ stops }: { stops: string[] }) => {
           </div>
         ))}
 
-        <button className="bg-green-600 text-white px-4 py-2 rounded-r-full rounded-l-full flex items-center gap-2 font-bold text-sm">
+        <button
+          className="bg-green-600 text-white px-4 py-2 rounded-r-full rounded-l-full flex items-center gap-2 font-bold text-sm hover:cursor-pointer"
+          type="button"
+          onClick={handleManageRoute}
+        >
           <img src="/route.svg" alt="route" />
           Manage route
         </button>
