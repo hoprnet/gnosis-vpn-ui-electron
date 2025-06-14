@@ -100,7 +100,7 @@ const createWindow = () => {
         break;
       case "stopVPN":
         try {
-          stopService(chaildProcess);
+          await stopService();
           mainWindow.webContents.send(
             "message",
             JSON.stringify({

@@ -1,19 +1,32 @@
 import { platform, arch } from "node:process";
 import { homedir } from "os";
 import { promises as fs } from "fs";
-import { promisify } from "node:util";
 import { spawn, ChildProcess } from "child_process";
 import { join } from "node:path";
 import sudo from "sudo-prompt";
 
-const sudo_exec = promisify(sudo.exec);
-
-const version = "v0.10.10";
-const socketPath = "/var/run/gnosis_vpn.sock";
-
 const sudoOptions = {
   name: "Gnosis VPN Service",
 };
+
+const sudo_exec = (cmd: string): Promise<string | Buffer | undefined> => {
+  return new Promise((resolve, reject) => {
+    console.info("run sudo command:", cmd);
+    sudo.exec(cmd, sudoOptions, (error, stdout, stderr) => {
+      if (error) {
+        reject(error);
+        console.log("error:" + error);
+        console.log("error output:" + stderr);
+      } else {
+        console.log("stdout: " + stdout);
+        resolve(stdout);
+      }
+    });
+  });
+};
+
+const version = "v0.10.10";
+const socketPath = "/var/run/gnosis_vpn.sock";
 
 const configFileTemplate = `
 version = 2
@@ -62,35 +75,33 @@ export async function updateConfigFile(
 }
 
 export async function stopService(): Promise<boolean> {
-  const { stdout, stderr } = await sudo_exec(
-    `lsof -t ${socketPath}`,
-    sudoOptions,
-  );
-  if (stderr) {
-    console.error("Error stopping service:", stderr);
-    return false;
-  }
-  if (stdout) {
-    const pids = stdout.trim().split("\n");
-    pids.forEach((pid) => {
-      const killCmd = `kill ${pid}`;
-      sudo_exec(killCmd, sudoOptions);
-    });
+  const stdout = await sudo_exec(`lsof -t ${socketPath} || :`);
+  if (typeof stdout === "string" || stdout instanceof String) {
+    const pids: string[] = stdout.trim().split("\n");
+    for (const pid of pids) {
+      if (!pid) {
+        continue;
+      }
+      const killCmd = `kill -4 ${pid}`;
+      await sudo_exec(killCmd);
+    }
   }
   return true;
 }
 
 export async function startService(): Promise<boolean> {
   // first kill any running service
-  if (!stopService()) {
+  const stopResult = await stopService();
+  if (!stopResult) {
     return false;
   }
 
   // now start service again
   const cmd = `nohup ${vpnServiceBinaryPath()} -s ${socketPath} -c ${configFilePath()} 2> /var/log/gnosis_vpn.error.log > /var/log/gnosis_vpn.log &`;
-  const { stdout, stderr } = await sudo_exec(cmd, sudoOptions);
+  const stdout = await sudo_exec(cmd);
   console.info("Service started:", stdout);
-  console.error("Service error:", stderr);
+
+  return true;
 }
 
 export function getStatusInfo(): Promise<string> {
