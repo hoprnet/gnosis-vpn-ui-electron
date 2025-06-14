@@ -48,7 +48,7 @@ const createWindow = () => {
     switch(type){
       case 'updateConfigFile':
         try {
-          await updateConfigFile(payload.apiEnpoint, payload.apiToken);
+          await updateConfigFile(payload.apiEndpoint, payload.apiToken);
           mainWindow.webContents.send(
             "message",
             JSON.stringify({
