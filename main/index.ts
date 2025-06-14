@@ -46,7 +46,7 @@ const createWindow = () => {
 
   ipcMain.on("message", async (_event: any, msg: string) => {
     console.log("Received from renderer: ", msg);
-    
+
     const json = JSON.parse(msg);
     const type = json.type;
     const payload = json.payload;
@@ -115,22 +115,22 @@ const createWindow = () => {
           );
         }
         break;
-      case 'status':
+      case "status":
         try {
           const payload = await getStatusInfo();
           mainWindow.webContents.send(
             "message",
             JSON.stringify({
               type: "statusResponse",
-              payload
-            })
+              payload,
+            }),
           );
         } catch (e) {
           mainWindow.webContents.send(
             "message",
             JSON.stringify({
-              error: e
-            })
+              error: e,
+            }),
           );
         }
         break;
