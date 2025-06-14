@@ -1,16 +1,28 @@
-import { useEffect } from "react";
+import React, { useEffect } from 'react';
 
 function Button() {
+    useEffect(() => {
+        const handler = (msg: string) => {
+            console.log('Received from main:', msg);
+        };
 
-    const handler = (msg: string) => {
-      console.log('Received from main:', msg);
-    };
+        window.electronAPI.onMessage(handler);
+        console.log("onMessage event handler loaded");
 
-    window.electronAPI.onMessage(handler);
+        return () => {
+            window.electronAPI.offMessage(handler);
+            console.log("onMessage event handler unloaded");
+        };
+    }, []);
+
+    function sendMessage(msg){
+        window.electronAPI.sendMessage(msg);
+        console.log("sendMessage: ", msg);
+    }
 
     return (
         <button
-            onClick={() => { window.electronAPI.sendMessage('Hello!'); }}
+            onClick={() => { sendMessage('Hello!') }}
         >
             TEST IPC
         </button>

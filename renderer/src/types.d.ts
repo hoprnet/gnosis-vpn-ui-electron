@@ -5,6 +5,7 @@ declare global {
     electronAPI: {
       sendMessage: (msg: string) => void;
       onMessage: (callback: (msg: string) => void) => void;
+       offMessage: (callback: (msg: string) => void) => void;
     };
   }
 }

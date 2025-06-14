@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -69,11 +69,3 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-
-
-// Listen for messages from the renderer process
-const { ipcMain } = require('electron');
-ipcMain.on('message', (_event: any, msg: string) => {
-  console.log('Received from renderer:', msg);
-});
-
