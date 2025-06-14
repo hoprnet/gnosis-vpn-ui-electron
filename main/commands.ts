@@ -48,6 +48,23 @@ export async function updateConfigFile(
   await writeConfig(config);
 }
 
+export function stopService(process: ChildProcess): void {
+  process.kill();
+}
+
+export function startService(): ChildProcess {
+  return executeBinary(
+    vpnServiceBinaryPath(),
+    ["-c", configFilePath()],
+    (data) => {
+      console.info("Service log output:", data);
+    },
+    (error) => {
+      console.error("Error starting VPN service:", error);
+    },
+  );
+}
+
 export function getStatusInfo(): Promise<string> {
   return executeCommand(vpnControlBinaryPath(), ["status"]);
 }
