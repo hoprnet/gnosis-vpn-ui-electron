@@ -15,7 +15,7 @@ function Button() {
         };
     }, []);
 
-    function sendMessage(msg){
+    function sendMessage(msg: string){
         window.electronAPI.sendMessage(msg);
         console.log("sendMessage: ", msg);
     }

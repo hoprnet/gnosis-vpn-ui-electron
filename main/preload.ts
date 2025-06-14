@@ -15,7 +15,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   onMessage: (callback: MessageHandler) => {
     const handler = (_event: IpcRendererEvent, msg: string) => callback(msg);
     listeners.set(callback, handler);
-    // ipcRenderer.on('message', handler);
+    ipcRenderer.on('message', handler);
   },
   offMessage: (callback: MessageHandler) => {
     const handler = listeners.get(callback);
