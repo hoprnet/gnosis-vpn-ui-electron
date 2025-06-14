@@ -1,5 +1,6 @@
 import { platform, arch } from "node:process";
 import { spawn, ChildProcess } from "child_process";
+import { join } from "node:path";
 
 const version = "v0.10.10";
 
@@ -33,9 +34,6 @@ function vpnBinaryName(suffix: string = ""): string {
   // Result: gnosis_vpn[-ctl]-x86_64-darwin
   return `gnosis_vpn${fullSuffix}-${binaryArch}-${platform}`;
 }
-
-import { platform, arch } from "node:process";
-import { join } from "node:path";
 
 function vpnServiceBinaryPath() {
   return join(__dirname, "binaries", version, vpnBinaryName());
