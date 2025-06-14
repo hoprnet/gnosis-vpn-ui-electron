@@ -28,6 +28,19 @@ const createWindow = () => {
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
+
+  // Send message after the window finishes loading
+  mainWindow.webContents.on('did-finish-load', () => {
+    mainWindow.webContents.send('message', 'Window loaded to the main process!');
+  });
+
+
+  ipcMain.on('message', (_event: any, msg: string) => {
+    console.log('Received from renderer:', msg);
+    mainWindow.webContents.send('message', 'Sending message back to renderer: ' + msg);
+  });
+
+
 };
 
 // This method will be called when Electron has finished
@@ -56,3 +69,11 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+
+
+// Listen for messages from the renderer process
+const { ipcMain } = require('electron');
+ipcMain.on('message', (_event: any, msg: string) => {
+  console.log('Received from renderer:', msg);
+});
+
