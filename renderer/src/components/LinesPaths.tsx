@@ -71,7 +71,23 @@ const LinePaths = ({ y }: { y: number | null }) => {
         strokeLinecap: 'square' as const,
       },
     ],
+    loading: [
+      {
+        d: `M${halfWidth} ${height * 0.5} V${height}`,
+        stroke: '#155dfc',
+        strokeLinecap: 'square' as const,
+      },
+    ],
+    error: [
+      {
+        d: `M${halfWidth} ${height * 0.85} V${height}`,
+        stroke: '#7b3306',
+        strokeLinecap: 'square' as const,
+      },
+    ],
   };
+
+  console.log(lines[status as keyof typeof lines]);
 
   return (
     <svg
@@ -88,7 +104,6 @@ const LinePaths = ({ y }: { y: number | null }) => {
             d={line.d}
             stroke={line.stroke}
             strokeWidth="25"
-            // fill="none"
             strokeLinecap={line.strokeLinecap || 'round'}
           />
         )

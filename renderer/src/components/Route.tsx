@@ -84,9 +84,9 @@ export const Route = () => {
     return (
       <div className="flex items-center justify-center h-full w-full pt-10 pb-5">
         <div className="relative flex flex-col items-center justify-between  w-full h-full">
-          {/* Green vertical bar */}
+          {/* vertical bar */}
           <div
-            className={`absolute top-1 bottom-0 w-[25px] ${colors.loading.bg} rounded-t-md mb-16`}
+            className={`absolute top-1 bottom-0 w-[25px] ${colors.loading.bg} rounded-t-md mb-0`}
           ></div>
 
           {/* Exit */}
@@ -101,8 +101,10 @@ export const Route = () => {
               height={25}
               className="justify-self-center mt-1"
             />
-            <span className="font-bold text-green-700 text-lg justify-self-start text-left">
-              {exit}
+            <span
+              className={`font-bold ${colors.offline.text} text-lg justify-self-start h-5 text-left animate-pulse `}
+            >
+              <div className={`bg-gray-300 h-5 rounded-full w-[60px]`}></div>{' '}
             </span>
           </div>
 
@@ -125,11 +127,39 @@ export const Route = () => {
                 height={25}
                 className="justify-self-center"
               />
-              <span className="font-bold text-green-700 text-lg justify-self-start text-left">
-                {hub}
+              <span
+                className={`font-bold text-lg justify-self-start h-5 text-left animate-pulse `}
+              >
+                <div className={`bg-gray-300 h-5 rounded-full w-[60px]`}></div>{' '}
               </span>
             </div>
           ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (status === 'error') {
+    return (
+      <div className="flex items-center justify-center h-full w-full pt-40 pb-0">
+        <div className="relative flex flex-col items-center justify-between  w-full h-full">
+          {/* vertical bar */}
+          <div
+            className={`absolute top-10 bottom-0 w-[25px] ${colors.error.bg} rounded-t-full mb-0`}
+          ></div>
+
+          <div className="items-center z-10 w-full gap-2">
+            <img
+              src="/error.svg"
+              alt="error"
+              width={22}
+              height={22}
+              className="justify-self-center mt-1"
+            />
+          </div>
+
+          {/* Middle Arrow
+        <div className="z-10 text-white text-xl mb-16">↑↑</div> */}
         </div>
       </div>
     );

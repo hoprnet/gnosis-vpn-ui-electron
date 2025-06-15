@@ -15,8 +15,8 @@ export const colors = {
     border: 'border-blue-600',
   },
   error: {
-    text: 'text-orange-600',
-    bg: 'bg-orange-600',
-    border: 'border-orange-600',
+    text: 'text-amber-900',
+    bg: 'bg-amber-600',
+    border: 'border-amber-600',
   },
 };

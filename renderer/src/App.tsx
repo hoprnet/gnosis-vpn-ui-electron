@@ -5,7 +5,6 @@ import { StartButton } from './components/Button/Button';
 import { Status } from './components/Status';
 import { Route } from './components/Route';
 import { useStateStore } from './stores/stateStore';
-import ManageRouteModal from './components/ManageRoute';
 
 function App() {
   const statusRef = useRef<HTMLDivElement | null>(null);
@@ -40,7 +39,7 @@ function App() {
         </div>
         <div className="flex flex-col items-center relative z-10 w-full h-full">
           <Status ref={statusRef} />
-          <Route stops={['Germany', 'Spain']} />
+          <Route />
           <StartButton />
           {/* <ManageRouteModal open={true} setOpen={() => {}} />; */}
         </div>
