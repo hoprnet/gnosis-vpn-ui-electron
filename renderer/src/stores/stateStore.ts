@@ -66,6 +66,7 @@ export const useStateStore = create<StateStore>(set => ({
         type: 'stopVPN',
       })
     );
+    set({ status: 'quitting' });
   },
   getStatus: async () => {
     sendMessage(

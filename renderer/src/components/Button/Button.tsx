@@ -4,9 +4,12 @@ import type { ConnectionState } from '../../types/types';
 import { Error } from './Error';
 import { SmartMode } from './SmartMode';
 
-const getText = (status: ConnectionState) => {
+const getText = (status: ConnectionState, apiConfigSet: boolean) => {
   switch (status) {
     case 'offline':
+      if (apiConfigSet) {
+        return 'Connect';
+      }
       return 'Start';
     case 'connected':
       return 'Stop';
@@ -64,7 +67,7 @@ export const Button = () => {
         className="button-gradient text-white p-2 font-bold hover:cursor-pointer w-full rounded-3xl"
         onClick={handleClick}
       >
-        {getText(status)}
+        {getText(status, apiConfigSet)}
       </button>
     </div>
   );
