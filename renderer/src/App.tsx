@@ -40,7 +40,7 @@ function App() {
         </div>
         <div className="flex flex-col items-center relative z-10 w-full h-full">
           <Status ref={statusRef} />
-          {/* {status === 'connected' && <Route stops={['Germany', 'Spain']} />} */}
+          <Route stops={['Germany', 'Spain']} />
           <StartButton />
           {/* <ManageRouteModal open={true} setOpen={() => {}} />; */}
         </div>

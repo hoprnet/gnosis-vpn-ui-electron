@@ -72,6 +72,9 @@ export const useStateStore = create<StateStore>(set => ({
       if (data.type === 'startVPNResponse' && data.payload === 'Success') {
         set({ status: 'connected' });
       }
+      if (data.type === 'stopVPNResponse' && data.payload === 'Success') {
+        set({ status: 'offline' });
+      }
     } catch (e) {
       console.error('Failed to parse message:', msg, e);
     }
