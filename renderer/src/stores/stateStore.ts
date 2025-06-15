@@ -3,6 +3,7 @@ import type { ConnectionState } from '../types/types';
 
 interface StateStore {
   status: ConnectionState;
+  exit: string;
   peers: string[];
   route: string[];
   setOffline: () => void;
@@ -24,7 +25,8 @@ function sendMessage(msg: string) {
 export const useStateStore = create<StateStore>(set => ({
   status: 'offline',
   peers: ['Germany', 'Spain', 'Unites States', 'India'],
-  route: ['Germany', 'Spain'],
+  route: ['Spain'],
+  exit: 'Germany',
   setOffline: () => set({ status: 'offline' }),
   setLoading: () => set({ status: 'loading' }),
   setError: () => set({ status: 'error' }),
