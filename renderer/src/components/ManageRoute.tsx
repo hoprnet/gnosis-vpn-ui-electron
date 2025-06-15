@@ -25,7 +25,7 @@ const ManageRouteModal = ({
         onClick={handleBack}
         aria-label="Back"
       >
-        <img src="/chevron-left.png" alt="Back" className="w-6 h-6" />
+        <img src="/chevron-left.svg" alt="Back" className="w-6 h-6" />
       </button>
 
       {/* Modal Container */}

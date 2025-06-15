@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useStateStore } from '../stores/stateStore';
 
 type Line = {
   d: string;
@@ -6,9 +7,10 @@ type Line = {
   strokeLinecap?: 'square' | 'butt' | 'round' | 'inherit' | undefined;
 };
 
-const LinePaths = ({ y, running }: { y: number | null; running: boolean }) => {
+const LinePaths = ({ y }: { y: number | null }) => {
   const [width, setWidth] = useState(window.innerWidth);
   const [height, setHeight] = useState(window.innerHeight);
+  const status = useStateStore(state => state.status);
 
   useEffect(() => {
     const handleResize = () => {
@@ -60,7 +62,7 @@ const LinePaths = ({ y, running }: { y: number | null; running: boolean }) => {
       strokeLinecap="square"
       style={{ position: 'absolute', top: 0, left: 0 }}
     >
-      {running
+      {status === 'connected'
         ? linesDataRunning.map((line: Line, index: number) => (
             <path
               key={index}
