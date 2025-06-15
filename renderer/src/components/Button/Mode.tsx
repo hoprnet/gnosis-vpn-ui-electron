@@ -4,7 +4,7 @@ import SmartModeModal from '../SmartModeModal';
 
 export const Mode = () => {
   const status = useStateStore(state => state.status);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   return (
     <>

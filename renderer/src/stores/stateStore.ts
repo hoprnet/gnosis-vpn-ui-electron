@@ -28,7 +28,7 @@ function sendMessage(msg: string) {
 }
 
 export const useStateStore = create<StateStore>(set => ({
-  status: 'connected',
+  status: 'offline',
   peers: ['Germany', 'Spain', 'Unites States', 'India'],
   route: ['Spain'],
   exit: 'Germany',
