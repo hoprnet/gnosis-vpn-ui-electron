@@ -50,7 +50,7 @@ export const Route = () => {
               key={hub}
             >
               <span className="text-xs font-bold text-gray-400 justify-self-end text-right">
-                HUB
+                RELAYER
               </span>
               <img
                 src="/hub.png"
@@ -118,7 +118,7 @@ export const Route = () => {
               key={hub}
             >
               <span className="text-xs font-bold text-gray-400 justify-self-end text-right">
-                HUB
+                RELAYER
               </span>
               <img
                 src="/hub.png"

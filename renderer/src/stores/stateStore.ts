@@ -17,6 +17,8 @@ interface StateStore {
   startVPN: () => Promise<void>;
   stopVPN: () => Promise<void>;
   getStatus: () => Promise<void>;
+  addToRoute: (peer: string) => void;
+  removeFromRoute: (peer: string) => void;
   msgHandler: (msg: string) => void;
 }
 
@@ -39,6 +41,12 @@ export const useStateStore = create<StateStore>(set => ({
   setLoading: () => set({ status: 'loading' }),
   setError: () => set({ status: 'error' }),
   setConnected: () => set({ status: 'connected' }),
+  addToRoute: (peer: string) => set(state => ({
+    route: [...state.route, peer]
+  })),
+  removeFromRoute: (peer: string) => set(state => ({
+    route: state.route.filter((p: string) => p !== peer)
+  })),
   updateConfigFile: async (apiEndpoint: string, apiToken: string) => {
     sendMessage(
       JSON.stringify({
