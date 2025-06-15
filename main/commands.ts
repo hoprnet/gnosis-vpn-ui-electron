@@ -64,7 +64,7 @@ export async function updateConfigFile(
   endpoint: string,
   api_token: string,
 ): Promise<void> {
-  const port = "9095";
+  const port = "9096";
 
   const config = configFileTemplate
     .replace("<ENDPOINT>", endpoint)
