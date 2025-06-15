@@ -66,7 +66,7 @@ export const Route = () => {
           ))}
 
           <button
-            className="bg-green-600 text-white px-4 py-2 rounded-r-full rounded-l-full flex items-center gap-2 font-bold text-sm hover:cursor-pointer"
+            className="bg-gradient-to-b from-green-600 to-[#083D1C] text-white px-4 py-2 rounded-r-full rounded-l-full flex items-center gap-2 font-bold text-sm hover:cursor-pointer"
             type="button"
             onClick={handleManageRoute}
           >
