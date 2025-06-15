@@ -97,14 +97,7 @@ export async function startService(): Promise<boolean> {
   }
 
   // now start service again
-  const cmd0 = `sh -c "which wg-quick"`;
-  const stdout0 = await sudo_exec(cmd0);
-  console.info("wrapped which wg-quick:", stdout0);
-  const cmd1 = `which wg-quick`;
-  const stdout1 = await sudo_exec(cmd1);
-  console.info("which wg-quick:", stdout1);
-
-  const cmd = `sh -c "echo $PATH; ${vpnServiceBinaryPath()} -s ${socketPath} -c ${configFilePath()} 2> /var/log/gnosis_vpn.error.log > /var/log/gnosis_vpn.log &"`;
+  const cmd = `sh -c "${vpnServiceBinaryPath()} -s ${socketPath} -c ${configFilePath()} 2> /var/log/gnosis_vpn.error.log > /var/log/gnosis_vpn.log &"`;
   const stdout = await sudo_exec(cmd);
   console.info("Service started:", stdout);
 

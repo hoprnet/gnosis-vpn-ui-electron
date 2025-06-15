@@ -167,5 +167,10 @@ app.on("window-all-closed", () => {
   }
 });
 
+app.on("quit", async () => {
+  console.info("Quitting, also stopping VPN service if running");
+  await stopService();
+});
+
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
