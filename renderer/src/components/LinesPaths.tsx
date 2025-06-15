@@ -87,8 +87,6 @@ const LinePaths = ({ y }: { y: number | null }) => {
     ],
   };
 
-  console.log(lines[status as keyof typeof lines]);
-
   return (
     <svg
       width={width}

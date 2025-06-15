@@ -28,8 +28,6 @@ export const Button = () => {
   const apiConfig = useStateStore(state => state.apiConfig);
   const updateConfigFile = useStateStore(state => state.updateConfigFile);
 
-  console.log(apiConfigSet, apiConfig);
-
   const handleClick = () => {
     switch (status) {
       case 'offline':

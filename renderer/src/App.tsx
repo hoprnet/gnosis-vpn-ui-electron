@@ -11,7 +11,6 @@ function App() {
   const statusRef = useRef<HTMLDivElement | null>(null);
   const [statusY, setStatusY] = useState<number | null>(null);
 
-  const status = useStateStore(state => state.status);
   const msgHandler = useStateStore(state => state.msgHandler);
 
   useEffect(() => {
@@ -29,8 +28,6 @@ function App() {
       setStatusY(statusRef.current.getBoundingClientRect().y);
     }
   }, []);
-
-  console.log('status: ', status);
 
   return (
     <>
