@@ -13,7 +13,7 @@ export const Status = forwardRef<HTMLDivElement>((_, ref) => {
       <span
         className={`w-2 h-2 rounded-full ${colors[status].bg} mr-2 ${colors[status].text}`}
       ></span>{' '}
-      {status}
+      {status === 'loading' ? 'connecting' : status}
     </div>
   );
 });

@@ -1,16 +1,19 @@
 import { create } from 'zustand';
-import type { ConnectionState } from '../types/types';
+import type { ApiConfig, ConnectionState } from '../types/types';
 
 interface StateStore {
   status: ConnectionState;
   exit: string;
   peers: string[];
   route: string[];
+  apiConfig: ApiConfig;
+  apiConfigSet: boolean;
   setOffline: () => void;
   setLoading: () => void;
   setError: () => void;
   setConnected: () => void;
   updateConfigFile: (apiEndpoint: string, apiToken: string) => Promise<void>;
+  setApiConfig: (apiEndpoint: string, apiToken: string) => void;
   startVPN: () => Promise<void>;
   stopVPN: () => Promise<void>;
   getStatus: () => Promise<void>;
@@ -23,10 +26,15 @@ function sendMessage(msg: string) {
 }
 
 export const useStateStore = create<StateStore>(set => ({
-  status: 'connected',
+  status: 'offline',
   peers: ['Germany', 'Spain', 'Unites States', 'India'],
   route: ['Spain'],
   exit: 'Germany',
+  apiConfig: {
+    apiEndpoint: 'http://210.10.140.8:3001',
+    apiToken: 'DAPPCON_GNOSISVPN_2025',
+  },
+  apiConfigSet: false,
   setOffline: () => set({ status: 'offline' }),
   setLoading: () => set({ status: 'loading' }),
   setError: () => set({ status: 'error' }),
@@ -41,6 +49,9 @@ export const useStateStore = create<StateStore>(set => ({
         },
       })
     );
+  },
+  setApiConfig: (apiEndpoint: string, apiToken: string) => {
+    set({ apiConfig: { apiEndpoint, apiToken } });
   },
   startVPN: async () => {
     sendMessage(
@@ -74,6 +85,12 @@ export const useStateStore = create<StateStore>(set => ({
       }
       if (data.type === 'stopVPNResponse' && data.payload === 'Success') {
         set({ status: 'offline' });
+      }
+      if (
+        data.type === 'updateConfigFileResponse' &&
+        data.payload === 'Success'
+      ) {
+        set({ apiConfigSet: true });
       }
     } catch (e) {
       console.error('Failed to parse message:', msg, e);

@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 
 import LinePaths from './components/LinesPaths';
-import { StartButton } from './components/Button/Button';
+import { Button } from './components/Button/Button';
 import { Status } from './components/Status';
 import { Route } from './components/Route';
 import { useStateStore } from './stores/stateStore';
+import { Config } from './components/Config';
 
 function App() {
   const statusRef = useRef<HTMLDivElement | null>(null);
@@ -39,8 +40,9 @@ function App() {
         </div>
         <div className="flex flex-col items-center relative z-10 w-full h-full">
           <Status ref={statusRef} />
+          <Config />
           <Route />
-          <StartButton />
+          <Button />
           {/* <ManageRouteModal open={true} setOpen={() => {}} />; */}
         </div>
       </div>

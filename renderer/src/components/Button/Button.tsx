@@ -17,16 +17,26 @@ const getText = (status: ConnectionState) => {
   }
 };
 
-export const StartButton = () => {
+export const Button = () => {
   const status = useStateStore(state => state.status);
   const startVPN = useStateStore(state => state.startVPN);
   const stopVPN = useStateStore(state => state.stopVPN);
   const setLoading = useStateStore(state => state.setLoading);
   const setOffline = useStateStore(state => state.setOffline);
 
+  const apiConfigSet = useStateStore(state => state.apiConfigSet);
+  const apiConfig = useStateStore(state => state.apiConfig);
+  const updateConfigFile = useStateStore(state => state.updateConfigFile);
+
+  console.log(apiConfigSet, apiConfig);
+
   const handleClick = () => {
     switch (status) {
       case 'offline':
+        if (!apiConfigSet) {
+          updateConfigFile(apiConfig.apiEndpoint, apiConfig.apiToken);
+          break;
+        }
         setLoading();
         startVPN();
         break;
@@ -46,8 +56,8 @@ export const StartButton = () => {
   };
 
   return (
-    <div className="flex flex-col items-center bg-gradient rounded-3xl p-6 min-w-xs mt-auto mb-10">
-      {status === 'offline' && <SmartMode />}
+    <div className="flex flex-col items-center bg-gradient rounded-3xl p-6 min-w-xs mt-auto mb-10 max-w-lg">
+      {status === 'offline' && apiConfigSet && <SmartMode />}
       {(status === 'connected' || status === 'loading') && <Mode />}
       {status === 'error' && <Error />}
       <button
