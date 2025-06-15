@@ -27,8 +27,8 @@ function Button() {
                     JSON.stringify({
                         type: 'updateConfigFile',
                         payload: {
-                            apiEndpoint: "",
-                            apiToken: ""
+                            apiEndpoint: "http://demo-node-1-p2p.demo-nodes.prod.hoprnet.link:3001",
+                            apiToken: "DAPPCON_GNOSISVPN_2025"
                         }
                     })
                 )}}

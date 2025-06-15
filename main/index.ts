@@ -14,10 +14,12 @@ if (require("electron-squirrel-startup")) {
 }
 
 const isDev = process.env.NODE_ENV === "development";
+let isQuitting = false;
+let mainWindow: any = null;
 
 const createWindow = () => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
@@ -165,6 +167,30 @@ app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
   }
+});
+
+app.on('before-quit', (event: { preventDefault: () => void; }) => {
+  if (isQuitting) return; //
+  event.preventDefault(); // Prevent default quit
+  isQuitting = true;
+  if (mainWindow) {
+    console.info("Sending message to renderer before quitting");
+    mainWindow.webContents.send(
+      "message",
+      JSON.stringify({
+        type: "quitingApplication",
+      }),
+    );
+  }
+  (async () => {
+    //await new Promise((resolve) => setTimeout(resolve, 5000)); // Simulate async work
+    await stopService();
+    app.quit(); // Quit after async work is done
+  })();
+});
+
+app.on("quit", () => {
+  console.info("Quitting");
 });
 
 // In this file you can include the rest of your app's specific main process
