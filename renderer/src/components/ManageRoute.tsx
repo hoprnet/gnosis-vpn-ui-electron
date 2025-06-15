@@ -35,18 +35,18 @@ const ManageRouteModal = ({
           through.
         </p>
 
-        <Peer type="exit" peer={exit} />
+        <Peer type="exit" peer={exit}/>
 
         {/* Description Note */}
         <p className="text-sm text-gray-400 mt-6">
-          Your{' '}
+          Your{' '}RELAYER
           <span className="text-green-700 inline-flex items-center gap-2 align-middle text-xs">
             <img src="/exit-small.svg" alt="exit" className="align-middle" />{' '}
             EXIT
           </span>{' '}
           country is where websites see you connecting from.{' '}
           <span className="text-green-700 inline-flex items-center gap-2 align-middle text-xs">
-            <img src="/hub-small.svg" alt="hub" className="align-middle" /> HUB
+            <img src="/hub-small.svg" alt="hub" className="align-middle" /> RELAYER
           </span>{' '}
           countries add privacy layers.
         </p>

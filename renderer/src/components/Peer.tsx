@@ -1,10 +1,15 @@
+import { useStateStore } from '../stores/stateStore';
+
 export const Peer = ({
   type,
-  peer,
+  peer
 }: {
   type: 'exit' | 'hub' | 'peer';
   peer: string;
 }) => {
+  const addToRoute = useStateStore(state => state.addToRoute);
+  const removeFromRoute = useStateStore(state => state.removeFromRoute);
+
   const colors = {
     exit: 'text-green-600',
     hub: 'text-green-800',
@@ -17,7 +22,7 @@ export const Peer = ({
       {type === 'hub' && <img src="/hub.svg" alt="hub" />}
       {type === 'peer' && <img src="/peer.svg" alt="peer" />}
       <div className={`flex flex-col ${colors[type]} flex-1`}>
-        <span className="text-xs uppercase">{type}</span>
+        <span className="text-xs uppercase">{type === 'hub' ? 'RELAYER' : type}</span>
         <span className="text-sm font-bold">{peer}</span>
       </div>
       {type === 'hub' && (
@@ -25,13 +30,15 @@ export const Peer = ({
           src="/circle-checked.svg"
           alt="checked"
           className="hover:cursor-pointer"
+          onClick={()=> removeFromRoute(peer)}
         />
       )}
       {type === 'peer' && (
         <img
           src="/circle-unchecked.svg"
-          alt="unchecked"
+          alt="checked"
           className="hover:cursor-pointer"
+          onClick={()=> addToRoute(peer)}
         />
       )}
     </div>
