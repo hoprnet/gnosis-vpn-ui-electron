@@ -85,6 +85,38 @@ const LinePaths = ({ y }: { y: number | null }) => {
         strokeLinecap: 'square' as const,
       },
     ],
+    quitting: [
+      {
+        d: `M${halfWidth} ${height * 0.3} V${height}`,
+        stroke: '#fafafa',
+      },
+
+      {
+        d: `M${halfWidth - gap} ${height * 0.25} V${height}`,
+        stroke: '#fafafa',
+      },
+      {
+        d: `M${halfWidth - gap} ${height * 0.25} H000`,
+        stroke: '#fafafa',
+      },
+
+      {
+        d: `M${halfWidth + gap} ${height * 0.7} V${height}`,
+        stroke: '#fafafa',
+      },
+      {
+        d: `M${halfWidth + gap} ${height * 0.7} H${width}`,
+        stroke: '#fafafa',
+      },
+    ],
+
+    // [
+    // {
+    //   d: `M${halfWidth} ${height * 0.3} V${height}`,
+    //   stroke: '#737373',
+    //   strokeLinecap: 'square' as const,
+    // },
+    // ],
   };
 
   return (

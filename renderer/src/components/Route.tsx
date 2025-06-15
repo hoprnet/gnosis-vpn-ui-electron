@@ -157,11 +157,21 @@ export const Route = () => {
               className="justify-self-center mt-1"
             />
           </div>
-
-          {/* Middle Arrow
-        <div className="z-10 text-white text-xl mb-16">↑↑</div> */}
         </div>
       </div>
     );
   }
+
+  // if (status === 'quitting') {
+  //   return (
+  //     <div className="flex items-center justify-center h-full w-full pt-10 pb-0">
+  //       <div className="relative flex flex-col items-center justify-between  w-full h-full">
+  //         {/* vertical bar */}
+  //         <div
+  //           className={`absolute top-10 bottom-0 w-[25px] ${colors.quitting.bg} rounded-t-full mb-0 animate-pulse`}
+  //         ></div>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 };

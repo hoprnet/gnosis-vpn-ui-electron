@@ -53,6 +53,8 @@ export const Button = () => {
     }
   };
 
+  if (status === 'quitting') return null;
+
   return (
     <div className="flex flex-col items-center bg-gradient rounded-3xl p-6 min-w-xs mt-auto mb-10 max-w-lg">
       {status === 'offline' && apiConfigSet && <SmartMode />}

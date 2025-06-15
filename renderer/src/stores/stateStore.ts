@@ -92,6 +92,9 @@ export const useStateStore = create<StateStore>(set => ({
       ) {
         set({ apiConfigSet: true });
       }
+      if (data.type === 'quittingApplication') {
+        set({ status: 'quitting' });
+      }
     } catch (e) {
       console.error('Failed to parse message:', msg, e);
     }

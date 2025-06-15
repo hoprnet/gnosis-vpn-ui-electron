@@ -19,4 +19,9 @@ export const colors = {
     bg: 'bg-amber-600',
     border: 'border-amber-600',
   },
+  quitting: {
+    text: 'text-neutral-500',
+    bg: 'bg-neutral-500',
+    border: 'border-neutral-500',
+  },
 };
