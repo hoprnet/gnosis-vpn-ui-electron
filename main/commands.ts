@@ -97,7 +97,7 @@ export async function startService(): Promise<boolean> {
   }
 
   // now start service again
-  const cmd = `sh -c "${vpnServiceBinaryPath()} -s ${socketPath} -c ${configFilePath()} 2> /var/log/gnosis_vpn.error.log > /var/log/gnosis_vpn.log &"`;
+  const cmd = `sh -c "echo $PATH; ${vpnServiceBinaryPath()} -s ${socketPath} -c ${configFilePath()} 2> /var/log/gnosis_vpn.error.log > /var/log/gnosis_vpn.log &"`;
   const stdout = await sudo_exec(cmd);
   console.info("Service started:", stdout);
 
