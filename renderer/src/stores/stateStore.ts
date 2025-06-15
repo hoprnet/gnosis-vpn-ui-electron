@@ -28,7 +28,7 @@ function sendMessage(msg: string) {
 }
 
 export const useStateStore = create<StateStore>(set => ({
-  status: 'offline',
+  status: 'connected',
   peers: ['Germany', 'Spain', 'Unites States', 'India'],
   route: ['Spain'],
   exit: 'Germany',
@@ -41,12 +41,14 @@ export const useStateStore = create<StateStore>(set => ({
   setLoading: () => set({ status: 'loading' }),
   setError: () => set({ status: 'error' }),
   setConnected: () => set({ status: 'connected' }),
-  addToRoute: (peer: string) => set(state => ({
-    route: [...state.route, peer]
-  })),
-  removeFromRoute: (peer: string) => set(state => ({
-    route: state.route.filter((p: string) => p !== peer)
-  })),
+  addToRoute: (peer: string) =>
+    set(state => ({
+      route: [...state.route, peer],
+    })),
+  removeFromRoute: (peer: string) =>
+    set(state => ({
+      route: state.route.filter((p: string) => p !== peer),
+    })),
   updateConfigFile: async (apiEndpoint: string, apiToken: string) => {
     sendMessage(
       JSON.stringify({
