@@ -82,7 +82,7 @@ export async function stopService(): Promise<boolean> {
       if (!pid) {
         continue;
       }
-      const killCmd = `kill -4 ${pid}`;
+      const killCmd = `kill -15 ${pid}`;
       await sudo_exec(killCmd);
     }
   }
